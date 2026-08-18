@@ -3,6 +3,7 @@ import { computed, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { useLeaveStore } from '../stores/leave.js';
 import RemainingProgress from '../components/RemainingProgress.vue';
+import { formatDate } from '../utils/leaveFormat.js';
 
 const props = defineProps({
   id: { type: String, required: true },
@@ -24,7 +25,7 @@ const annualPlLabel = computed(() => {
 });
 
 const headers = [
-  { title: 'Date', key: 'date' },
+  { title: 'Date', key: 'date', width: 130 },
   { title: 'Days', key: 'days', align: 'end' },
   { title: 'Note', key: 'comment' },
 ];
@@ -68,7 +69,11 @@ onMounted(async () => {
 
     <v-card variant="outlined">
       <v-card-title class="text-subtitle-1">Paid leave taken this year</v-card-title>
-      <v-data-table :headers="headers" :items="entries" :loading="store.loadingRequests" item-value="id" />
+      <v-data-table :headers="headers" :items="entries" :loading="store.loadingRequests" item-value="id">
+        <template #item.date="{ item }">
+          <span class="text-no-wrap">{{ formatDate(item.date) }}</span>
+        </template>
+      </v-data-table>
     </v-card>
   </v-container>
 </template>

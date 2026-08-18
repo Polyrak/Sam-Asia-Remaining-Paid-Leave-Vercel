@@ -46,6 +46,15 @@ export function parseNumberOrSum(raw) {
   return { value, note: trimmed };
 }
 
+// "28/08/2026" (DD/MM/YYYY). Parses the "YYYY-MM-DD" string directly rather
+// than going through Date's local-timezone getters, which can shift the
+// displayed day by one depending on the viewer's timezone.
+export function formatDate(isoDate) {
+  if (!isoDate) return '—';
+  const [year, month, day] = isoDate.split('-');
+  return `${day}/${month}/${year}`;
+}
+
 function ordinal(day) {
   if (day % 10 === 1 && day !== 11) return `${day}st`;
   if (day % 10 === 2 && day !== 12) return `${day}nd`;
