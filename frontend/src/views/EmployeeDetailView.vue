@@ -66,7 +66,7 @@ onMounted(async () => {
       </v-card-text>
     </v-card>
 
-    <v-card>
+    <v-card variant="outlined">
       <v-card-title class="text-subtitle-1">Paid leave taken this year</v-card-title>
       <v-data-table :headers="headers" :items="entries" :loading="store.loadingRequests" item-value="id" />
     </v-card>
