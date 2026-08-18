@@ -79,13 +79,16 @@ async function handleExportPdf() {
       <v-text-field
         v-model="search"
         prepend-inner-icon="mdi-magnify"
+        append-inner-icon="mdi-information-outline"
         label="Search employees"
         density="compact"
         hide-details
         clearable
         variant="outlined"
         style="max-width: 280px"
-      />
+      >
+        <v-tooltip activator="parent" location="top">Searches by employee name only</v-tooltip>
+      </v-text-field>
       <v-btn icon="mdi-refresh" :loading="store.loadingSummary" @click="refresh" />
       <v-menu>
         <template #activator="{ props: menuProps }">
@@ -109,6 +112,7 @@ async function handleExportPdf() {
           :headers="headers"
           :items="filtered"
           :search="search"
+          :filter-keys="['name']"
           :loading="store.loadingSummary"
           :row-props="rowProps"
           item-value="id"
