@@ -21,8 +21,11 @@ const headers = [
 ];
 
 const filtered = computed(() =>
-  store.summary.map((item) => {
-    const row = { ...item, annualPl: formatAnnualPl(item) };
+  store.summary.map((item, index) => {
+    // Computed here (not from the #item.no slot's index) because Vuetify's
+    // v-data-table slot index is page-local — it would restart at 1 on every
+    // page instead of continuing 11, 12, 13...
+    const row = { ...item, no: index + 1, annualPl: formatAnnualPl(item) };
     MONTH_LABELS.forEach((_, i) => {
       const value = item.monthly?.[i] ?? 0;
       row[`m${i}`] = value ? value : '—';
@@ -115,11 +118,12 @@ async function handleExportPdf() {
           :filter-keys="['name']"
           :loading="store.loadingSummary"
           :row-props="rowProps"
+          hover
           item-value="id"
           @click:row="(_, { item }) => openEmployee(item)"
           style="cursor: pointer; min-width: 1400px"
         >
-          <template #item.no="{ index }">{{ index + 1 }}</template>
+          <template #item.no="{ item }">{{ item.no }}</template>
           <template #item.annualPl="{ item }">
             <span class="text-no-wrap">{{ item.annualPl }}</span>
           </template>
