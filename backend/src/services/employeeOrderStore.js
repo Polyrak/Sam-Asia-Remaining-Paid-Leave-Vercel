@@ -26,16 +26,16 @@ export async function setEmployeeOrder(order) {
 }
 
 /**
- * Sorts employees by the manually configured order (since OpenProject has no
- * display-order concept for project members); everyone is still shown —
- * anyone not listed keeps their existing relative order, appended after the
- * listed ones.
+ * The order list is the curated roster to display, not just a sort hint:
+ * employees not listed are left out entirely, since OpenProject project
+ * membership can include people outside the group this dashboard tracks.
+ * If nothing has been configured yet, falls back to showing everyone so a
+ * fresh setup isn't an empty dashboard.
  */
 export function applyEmployeeOrder(employees, order) {
+  if (!order.length) return employees;
   const rank = new Map(order.map((id, index) => [String(id), index]));
-  return [...employees].sort((a, b) => {
-    const rankA = rank.has(String(a.id)) ? rank.get(String(a.id)) : Infinity;
-    const rankB = rank.has(String(b.id)) ? rank.get(String(b.id)) : Infinity;
-    return rankA - rankB;
-  });
+  return employees
+    .filter((e) => rank.has(String(e.id)))
+    .sort((a, b) => rank.get(String(a.id)) - rank.get(String(b.id)));
 }

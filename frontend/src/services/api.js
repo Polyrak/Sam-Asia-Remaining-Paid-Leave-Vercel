@@ -58,3 +58,28 @@ export async function setEmployeeOrder(order) {
   const { data } = await api.put('/employee-order', { order });
   return data.order;
 }
+
+export async function fetchJoinDates() {
+  const { data } = await api.get('/join-dates');
+  return data;
+}
+
+export async function setJoinDate(userId, date) {
+  const { data } = await api.put(`/join-dates/${userId}`, { date });
+  return data;
+}
+
+export async function removeJoinDate(userId) {
+  const { data } = await api.delete(`/join-dates/${userId}`);
+  return data;
+}
+
+export async function fetchTimesheetCompliance() {
+  const { data } = await api.get('/timesheet-compliance');
+  return data;
+}
+
+export async function fetchTimesheetDetail(userId) {
+  const { data } = await api.get(`/timesheet-compliance/${userId}`);
+  return data;
+}
