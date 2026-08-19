@@ -5,7 +5,7 @@
   "type": "module",
   "description": "API server that computes remaining paid leave from an OpenProject instance",
   "scripts": {
-    "dev": "nodemon src/index.js",
+    "dev": "nodemon --exec \"node scripts/run-with-retry.mjs\"",
     "start": "node src/index.js"
   },
   "dependencies": {

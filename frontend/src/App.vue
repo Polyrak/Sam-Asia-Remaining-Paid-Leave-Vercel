@@ -68,4 +68,13 @@ function toggleTheme() {
 .v-data-table-footer .v-field__input {
   color: rgb(var(--v-theme-primary)) !important;
 }
+
+/* Vuetify truncates card subtitles to a single line with an ellipsis by
+   default — our subtitles are often full sentences, so let them wrap. */
+.v-card-subtitle {
+  white-space: normal !important;
+  overflow: visible !important;
+  text-overflow: initial !important;
+  -webkit-line-clamp: initial !important;
+}
 </style>
