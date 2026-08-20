@@ -37,7 +37,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <v-container fluid>
+  <v-container fluid style="max-width: 900px">
     <v-btn variant="text" prepend-icon="mdi-arrow-left" class="mb-4" @click="router.push({ name: 'dashboard' })">
       Back to dashboard
     </v-btn>
@@ -75,5 +75,11 @@ onMounted(async () => {
         </template>
       </v-data-table>
     </v-card>
+
+    <div class="d-flex justify-end mt-4">
+      <v-btn prepend-icon="mdi-arrow-left" @click="router.push({ name: 'dashboard' })">
+        Back to dashboard
+      </v-btn>
+    </div>
   </v-container>
 </template>
