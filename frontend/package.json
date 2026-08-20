@@ -6,8 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview",
-    "postinstall": "cd .. && npm install"
+    "preview": "vite preview"
   },
   "dependencies": {
     "@mdi/font": "^7.4.47",

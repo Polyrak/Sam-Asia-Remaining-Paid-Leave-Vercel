@@ -1,8 +1,12 @@
 import axios from 'axios';
 
-export const api = axios.create({
-  baseURL: '/api',
-});
+// Locally, Vite's dev server proxies "/api" to the backend (see vite.config.js).
+// In production the frontend and backend are two separate Vercel projects on
+// different domains, so VITE_API_BASE_URL must point at the deployed backend,
+// e.g. "https://your-backend-project.vercel.app/api".
+const baseURL = import.meta.env.VITE_API_BASE_URL || '/api';
+
+export const api = axios.create({ baseURL });
 
 export async function fetchHealth() {
   const { data } = await api.get('/health');
