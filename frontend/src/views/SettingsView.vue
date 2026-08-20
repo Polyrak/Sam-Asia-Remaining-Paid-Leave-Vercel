@@ -484,7 +484,7 @@ onMounted(async () => {
             </v-card-text>
             <v-card-actions>
               <v-spacer />
-              <v-btn variant="text" @click="tenureDialog = false">Close</v-btn>
+              <v-btn @click="tenureDialog = false">Close</v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
@@ -766,6 +766,20 @@ onMounted(async () => {
 <style scoped>
 .compliance-table :deep(table) {
   min-width: 900px;
+}
+
+/* Vertical scroll once there are a lot of employees — same wrapper Vuetify
+   already scrolls horizontally for the wide Jan-Dec-style day columns. */
+.compliance-table :deep(.v-table__wrapper) {
+  max-height: 480px;
+  overflow-y: auto;
+}
+
+.compliance-table :deep(thead th) {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: rgb(var(--v-theme-surface));
 }
 
 .compliance-table :deep(.compliance-row:hover) {

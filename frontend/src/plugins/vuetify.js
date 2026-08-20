@@ -25,5 +25,7 @@ export const vuetify = createVuetify({
   defaults: {
     VCard: { rounded: 'lg' },
     VBtn: { variant: 'outlined' },
+    VTextField: { variant: 'outlined' },
+    VSelect: { variant: 'outlined' },
   },
 });

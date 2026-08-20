@@ -8,6 +8,7 @@ const store = useLeaveStore();
 const router = useRouter();
 const search = ref('');
 const page = ref(1);
+const itemsPerPage = ref(10);
 const exporting = ref(false);
 
 const headers = [
@@ -42,6 +43,7 @@ watch(search, () => {
 
 function refresh() {
   page.value = 1;
+  itemsPerPage.value = 10;
   store.loadSummary();
 }
 
@@ -75,7 +77,7 @@ async function handleExportPdf() {
 </script>
 
 <template>
-  <v-container fluid>
+  <v-container fluid style="max-width: 900px">
     <div class="d-flex align-center mb-4 ga-4">
       <h1 class="text-h5"></h1>
       <v-spacer />
@@ -95,9 +97,10 @@ async function handleExportPdf() {
       <v-btn icon="mdi-refresh" :loading="store.loadingSummary" @click="refresh" />
       <v-menu>
         <template #activator="{ props: menuProps }">
-          <v-btn prepend-icon="mdi-download" color="primary" :loading="exporting" v-bind="menuProps">
-            Export
-          </v-btn>
+          <div class="position-relative">
+            <v-btn icon="mdi-download" color="primary" :loading="exporting" v-bind="menuProps" />
+            <v-tooltip activator="parent" location="top">Export</v-tooltip>
+          </div>
         </template>
         <v-list>
           <v-list-item prepend-icon="mdi-file-excel" title="Export as Excel (.xlsx)" @click="handleExportExcel" />
@@ -109,32 +112,34 @@ async function handleExportPdf() {
     <v-alert v-if="store.error" type="error" class="mb-4" closable>{{ store.error }}</v-alert>
 
     <v-card variant="outlined">
-      <div style="overflow-x: auto">
-        <v-data-table
-          v-model:page="page"
-          :headers="headers"
-          :items="filtered"
-          :search="search"
-          :filter-keys="['name']"
-          :loading="store.loadingSummary"
-          :row-props="rowProps"
-          hover
-          item-value="id"
-          @click:row="(_, { item }) => openEmployee(item)"
-          style="cursor: pointer; min-width: 1400px"
-        >
-          <template #item.no="{ item }">{{ item.no }}</template>
-          <template #item.annualPl="{ item }">
-            <span class="text-no-wrap">{{ item.annualPl }}</span>
-          </template>
-          <template #item.used="{ item }">
-            <span :class="item.used > item.entitlement ? 'text-red' : 'text-green'">{{ item.used }}</span>
-          </template>
-          <template #item.remaining="{ item }">
-            <span :class="item.remaining <= 0 ? 'text-red' : 'text-green'">{{ item.remaining }}</span>
-          </template>
-        </v-data-table>
-      </div>
+      <v-data-table
+        v-model:page="page"
+        v-model:items-per-page="itemsPerPage"
+        :headers="headers"
+        :items="filtered"
+        :search="search"
+        :filter-keys="['name']"
+        :loading="store.loadingSummary"
+        :row-props="rowProps"
+        hover
+        item-value="id"
+        class="dashboard-table"
+        @click:row="(_, { item }) => openEmployee(item)"
+        style="cursor: pointer"
+      >
+        <template #item.no="{ item }">
+          <span class="text-primary font-weight-bold">{{ item.no }}.</span>
+        </template>
+        <template #item.annualPl="{ item }">
+          <span class="text-no-wrap text-green font-weight-bold">{{ item.annualPl }}</span>
+        </template>
+        <template #item.used="{ item }">
+          <span :class="item.used > item.entitlement ? 'text-red' : 'text-green'">{{ item.used }}</span>
+        </template>
+        <template #item.remaining="{ item }">
+          <span :class="item.remaining <= 0 ? 'text-red' : 'text-green'">{{ item.remaining }}</span>
+        </template>
+      </v-data-table>
     </v-card>
   </v-container>
 </template>
@@ -142,5 +147,12 @@ async function handleExportPdf() {
 <style scoped>
 :deep(.warning-row) {
   background-color: rgba(var(--v-theme-warning), 0.15) !important;
+}
+
+/* Only the header+rows area should scroll horizontally for the wide Jan-Dec
+   columns — the pagination footer sits outside that wrapper in Vuetify's
+   markup, so it stays fixed and fully visible regardless of scroll position. */
+.dashboard-table :deep(table) {
+  min-width: 1400px;
 }
 </style>

@@ -2,6 +2,15 @@ import { spawn, execSync } from 'node:child_process';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+// Dev-only tool: killing whatever holds the port and silently swallowing
+// crashes is exactly what you don't want in production, where the hosting
+// platform's own restart policy should be the one seeing (and reacting to)
+// a crash. Refuse to run there even if `npm run dev` gets invoked by mistake.
+if (process.env.NODE_ENV === 'production') {
+  console.error('[run-with-retry] refusing to run with NODE_ENV=production — use "npm start" instead.');
+  process.exit(1);
+}
+
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const backendRoot = path.join(__dirname, '..');
 const port = process.env.PORT || 4000;
