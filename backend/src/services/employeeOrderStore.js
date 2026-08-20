@@ -1,27 +1,16 @@
-import { readFile, writeFile } from 'node:fs/promises';
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { readStore, writeStore } from './dataStore.js';
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const filePath = path.join(__dirname, '..', 'data', 'employeeOrder.json');
-
-async function readStore() {
-  const raw = await readFile(filePath, 'utf-8');
-  return JSON.parse(raw);
-}
-
-async function writeStore(store) {
-  await writeFile(filePath, JSON.stringify(store, null, 2));
-}
+const STORE_NAME = 'employeeOrder';
+const DEFAULT_STORE = { order: [] };
 
 export async function getEmployeeOrder() {
-  const store = await readStore();
+  const store = await readStore(STORE_NAME, DEFAULT_STORE);
   return store.order;
 }
 
 export async function setEmployeeOrder(order) {
   const store = { order: order.map(String) };
-  await writeStore(store);
+  await writeStore(STORE_NAME, store);
   return store;
 }
 

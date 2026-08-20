@@ -9,6 +9,7 @@
     "start": "node src/index.js"
   },
   "dependencies": {
+    "@vercel/kv": "^3.0.0",
     "axios": "^1.7.7",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
@@ -20,6 +21,8 @@
     "nodemon": "^3.1.4"
   },
   "nodemonConfig": {
-    "ignore": ["src/data/*"]
+    "ignore": [
+      "src/data/*"
+    ]
   }
 }

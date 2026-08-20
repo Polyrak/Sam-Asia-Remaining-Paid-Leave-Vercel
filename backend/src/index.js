@@ -31,6 +31,14 @@ app.use((err, req, res, next) => {
   res.status(err.status && err.status < 600 ? err.status : 500).json({ message: err.message });
 });
 
-app.listen(config.port, () => {
-  console.log(`Remaining paid leave API listening on http://localhost:${config.port}`);
-});
+// Vercel invokes this module per-request as a serverless function — it
+// never calls listen() itself, it just needs the Express app as the default
+// export. Locally (and on any other host that runs `npm start`), run the
+// usual persistent server.
+if (!process.env.VERCEL) {
+  app.listen(config.port, () => {
+    console.log(`Remaining paid leave API listening on http://localhost:${config.port}`);
+  });
+}
+
+export default app;
